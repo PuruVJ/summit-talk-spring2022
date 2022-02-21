@@ -7,13 +7,10 @@
   },
   "dependencies": {
     "@slidev/cli": "^0.28.6",
-    "@slidev/theme-default": "*",
-    "@slidev/theme-seriph": "*",
-    "slidev-theme-zhozhoba": "^1.0.0"
+    "@slidev/theme-seriph": "*"
   },
   "name": "summit-talk2022",
   "devDependencies": {
-    "@iconify-json/fa": "^1.0.1",
-    "slidev-theme-penguin": "^1.3.4"
+    "@iconify-json/fa": "^1.0.1"
   }
 }
