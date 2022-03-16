@@ -6,11 +6,12 @@
     "export": "slidev export"
   },
   "dependencies": {
-    "@slidev/cli": "^0.28.6",
-    "@slidev/theme-seriph": "*"
+    "@slidev/cli": "^0.28.10",
+    "@slidev/theme-default": "^0.21.2",
+    "@slidev/theme-seriph": "0.21.2"
   },
   "name": "summit-talk2022",
   "devDependencies": {
-    "@iconify-json/fa": "^1.0.1"
+    "@iconify-json/fa": "^1.1.1"
   }
 }
