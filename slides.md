@@ -619,10 +619,13 @@ layout: fact
 
 <!--
 
-It was a very, very smooth process.
+It was a very, very smooth process. Unbelievably smooth. I was very surprised when the whole process got over in just 2 days!
 
 -->
 
 ---
 layout: quote
 ---
+
+# The Process
+
