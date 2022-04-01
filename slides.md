@@ -490,7 +490,7 @@ This here is the `AppNexus` component. Why Nexus? Nexus in science fiction and f
 layout: fact
 ---
 
-# <span text="orange-400">85KB</span><span class="font-mono"> -> </span><span text="green-300">62KB</span>
+# <span text="orange-400">85KB</span><span class="font-mono"> -> </span><span text="yellow-300">62KB</span>
 
 <!--
 
@@ -624,8 +624,192 @@ It was a very, very smooth process. Unbelievably smooth. I was very surprised wh
 -->
 
 ---
-layout: quote
+layout: fact
+---
+
+# Results
+
+---
+layout: fact
+---
+
+# 🥁 
+
+---
+layout: fact
+---
+
+# <span text="yellow-300">62KB</span><span class="font-mono"> -> </span><span text="green-300">28.5KB</span>
+
+<v-click>
+
+## 🤯🤯🤯
+
+</v-click>
+
+<!--
+
+This brought the size down to 28.5KB!!
+
+This is literally less than half of before. And that is just from moving to Svelte!!
+
+-->
+
+---
+layout: center
+---
+
+![](/to-infinity-and-beyond-meme.jpeg)
+
+<!--
+
+And the runtime performance increased drastically. Drastically. Earlier, there was still slight jank in how fast the menus opened up, in how the dock animation worked. But now it was all gone. Everything was super smooth.
+
+-->
+
+---
+layout: fact
 ---
 
 # The Process
 
+<!--
+
+Overall moving to Svelte was a very smooth experience. Here are a few snippets of the whole process.
+
+-->
+
+---
+
+# Local State
+
+```js
+const [xPos, setXPos] = useState(0);
+const [yPos, setYPos] = useState(0);
+const [isMenuVisible, setIsMenuVisible] = useState(false);
+```
+
+<v-click>
+
+Became this 👇
+
+```js
+let xPos = 0;
+let yPos = 0;
+let isMenuVisible = false;
+```
+
+</v-click>
+
+<!-- 
+
+This...
+
+Became this..
+
+Already the boilerplate reduction begins at the most basic concept of modern web dev: Local State.
+
+-->
+
+---
+layout: quote
+---
+
+# What about global state?
+
+<!--
+
+Earlier I was using Jotai in the Preact version. The reason for choosing Jotai was how minimalistic it feels. It feels very very close to Svelte stores, compared to anything else in the React ecosystem.
+
+-->
+
+---
+
+# Jotai syntax
+
+```js
+// Create global store
+const themeAtom = atom('light');
+
+// Inside the component
+const [theme, setTheme] = useAtom(themeAtom);
+
+// Accessing `theme`
+console.log(theme);
+
+// Changing `theme`
+setTheme('dark');
+```
+
+<!--
+
+OFC, it doesn't look anything like svelte stores or state, it looks closer to `useState` hook, but compared to what you get in React ecosystem, with Redux, Context API etc, this is really great.
+
+-->
+
+---
+
+# Global state in Svelte
+
+```js
+const theme = writable('light');
+
+// Accessing `theme`
+console.log($theme);
+
+// Changing `theme`
+$theme = 'dark';
+```
+
+<!--
+
+This became this. Not a lot of difference but if you repeat it over and over in different places, it actually makes the code much smaller. Just import and use. That's it. No need to declare `theme, setTheme` variables.
+
+-->
+
+---
+
+# What about Styles?
+
+Styles were already plain `.scss`, so all it took was inlining them into the components directly by copy pasting.
+
+<!--
+
+That's it!
+
+-->
+
+---
+layout: fact
+---
+
+# Observations
+
+<!--
+
+Finally, let's talk about my observations, what all I learned from this process.
+
+-->
+
+
+---
+
+# Svelte code is much simpler!
+
+<v-click>
+
+<img class="w-3/5" src="https://www.puruvj.dev/media/macos-preact-to-svelte--svelte-simplicity-tweet.png" />
+
+</v-click>
+
+<!--
+
+Svelte being an extension of HTML rather than JavaScript already made it much simpler than the previous codebase in JSX. All indentation was reduced by 2 levels automatically
+
+Plus the constructs in it like the blocks and all made it even more cleaner looking.
+
+Heck I even tweeted it out.
+
+As you can see here, the coe on right is larger. That's because of how little code svelte requires, compared to JSX. There's also lesser dependencies on the code on the right. No ternaries, so `clsx` for dynamic classes, just use svelte's features and get instantantly beautiful code.
+
+-->
