@@ -728,6 +728,8 @@ Earlier I was using Jotai in the Preact version. The reason for choosing Jotai w
 # Jotai syntax
 
 ```js
+import { atom, useAtom } from 'jotai';
+
 // Create global store
 const themeAtom = atom('light');
 
@@ -752,6 +754,8 @@ OFC, it doesn't look anything like svelte stores or state, it looks closer to `u
 # Global state in Svelte
 
 ```js
+import { writable } from 'svelte/store';
+
 const theme = writable('light');
 
 // Accessing `theme`
@@ -810,6 +814,25 @@ Plus the constructs in it like the blocks and all made it even more cleaner look
 
 Heck I even tweeted it out.
 
-As you can see here, the coe on right is larger. That's because of how little code svelte requires, compared to JSX. There's also lesser dependencies on the code on the right. No ternaries, so `clsx` for dynamic classes, just use svelte's features and get instantantly beautiful code.
+As you can see here, the code on right is larger. That's because of how little code svelte requires, compared to JSX. There's also lesser dependencies on the code on the right. No ternaries, so `clsx` for dynamic classes, just use svelte's features and get instantantly beautiful code.
+
+And to top it off, some components got smaller too, some by as much as 50%, and at least 3 components weren't even needed, they were just merged into bigger components directly, and overall code stayed simple enough only. It was an absolute win win.
 
 -->
+
+---
+layout: fact
+---
+
+# Svelte Motion = 🔥
+
+<!--
+
+macOS is an Operating system, and no OS is complete without animations. This is where Svelte's built in Motion stores and transitions come in.
+
+
+
+-->
+
+---
+
