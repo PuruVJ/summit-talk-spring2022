@@ -684,6 +684,8 @@ Overall moving to Svelte was a very smooth experience. Here are a few snippets o
 # Local State
 
 ```js
+import { useState } from 'preact/hooks';
+
 const [xPos, setXPos] = useState(0);
 const [yPos, setYPos] = useState(0);
 const [isMenuVisible, setIsMenuVisible] = useState(false);
@@ -830,9 +832,113 @@ layout: fact
 
 macOS is an Operating system, and no OS is complete without animations. This is where Svelte's built in Motion stores and transitions come in.
 
+Svelte's Motion stores are extremely lightweight, and extremely powerful. They power the dock animation when you hover over it, the window close and open animations, dialog open and close animations, and using them is extremely easy.
 
+Previously I was using Framer Motion. Framer Motion is a great library and my go-to thing for animations in P/React. But there's just one little issue with it: It's not exactly small 🥲
 
 -->
 
 ---
+
+![](/framer-motion-bundlephobia.png)
+
+<!--
+
+Framer Motion v4 stands at 32KB gzip. For comparison, that is nearly as much as the whole app after moving to Svelte.
+
+Oh, and another advantage of moving off of the React ecosystem then: Framer Motion v6, the latest one is 10kb more than framer motion v4, gzip and minified. So, if I had stayed on React until now, the size would probably have increased without me doing anything.
+
+So yeah, I got off at the right time 😅
+
+But ofc, this is not shade at framer motion. Framer motion can do a thousand things under the sun. It's size is indicative of its capabilities. There's no such thing as a good tool or a bad tool. There's only such thing as the right tool for the job.
+
+-->
+
+---
+layout: fact
+---
+
+# Framer Motion was overqualified
+
+<!--
+
+Framer Motion was wayyyy too overqualified for my use case. I didn't need layout animations, or staggered animations or any of that thing, all I needed were very simple animation primitives, like entry and exit animations, spring and tweened animations. Nothing too fancy
+
+-->
+
+---
+layout: quote
+---
+
+# And Svelte provides these out of the box 🤩
+
+---
+layout: center
+---
+
+![](/dock-bounce-animation.gif)
+
+<!--
+
+Let's have a look at an example. When you click on any of the app icons on the dock
+
+-->
+---
+layout: two-cols
+---
+
+```js
+const [animateObj, setAnimateObj] = useState({ translateY: ['0%', '0%', '0%'] });
+
+<motion.span
+  onTap={() => setAnimateObj({ translateY: ['0%', '-39.2%', '0%'] })}
+  initial={false}
+  animate={animateObj}
+  transition={{ type: 'spring', duration: 0.7 }}
+  transformTemplate={({ translateY }) => `translateY(${translateY})`}
+>
+  {/* Markup */}
+</motion.span>;
+```
+
+::right::
+
+<v-click>
+
+```svelte
+<script>
+  // Spring animation for the click animation
+  const appOpenIconBounceTransform = tweened(0, {
+    duration: 400,
+    easing: sineInOut,
+  });
+
+  async function openApp(e: MouseEvent) {
+    /* State related stuff */
+
+    // Animate the icon
+    await appOpenIconBounceTransform.set(-39.2);
+
+    // Now animate it back to its place
+    appOpenIconBounceTransform.set(0);
+  }
+</script>
+
+<span style="transform: translate3d(0, {$appOpenIconBounceTransform}%, 0)">
+  <!-- Stuff -->
+</span>
+```
+
+</v-click>
+
+<style>
+  .slidev-layout {
+    gap: 2rem;
+  }
+
+  code {
+    font-size: 0.5rem;
+    line-height: 0.7 !important;
+  }
+</style>
 
