@@ -40,8 +40,9 @@ Fun project I made almost a year ago
 <img src="/macos-latest.png" class="w-4/5" />
 
 <!--
-You can have `style` tag in markdown to override the style for the current page.
-Learn more: https://sli.dev/guide/syntax#embedded-styles
+
+It's a project I made for fun. Started 1 and half year ago, kept iterating on it, kept adding features
+
 -->
 
 ---
@@ -84,7 +85,7 @@ layout: quote
 layout: fact
 ---
 
-# It was <span class="text-blue-200">146KB <span v-click>min+br</span></span> <span v-click>ONLY JS</span>
+# It was <span class="text-red-300">146KB <span v-click>min+br</span></span> <span v-click>ONLY JS</span>
 
 ---
 layout: center
@@ -880,14 +881,15 @@ layout: center
 
 <!--
 
-Let's have a look at an example. When you click on any of the app icons on the dock
+Let's have a look at an example. When you click on any of the app icons on the dock, the icon bounces up and down. Let's compare the code for this in framer motion and with svelte motion.
 
 -->
+
 ---
 layout: two-cols
 ---
 
-```js
+```js {1-11|1|4|5|6|7|8|1-11}
 const [animateObj, setAnimateObj] = useState({ translateY: ['0%', '0%', '0%'] });
 
 <motion.span
@@ -903,11 +905,8 @@ const [animateObj, setAnimateObj] = useState({ translateY: ['0%', '0%', '0%'] })
 
 ::right::
 
-<v-click>
-
-```svelte
+```svelte {1-22|2-5|18|19|7-15|11|14|1-22}
 <script>
-  // Spring animation for the click animation
   const appOpenIconBounceTransform = tweened(0, {
     duration: 400,
     easing: sineInOut,
@@ -924,12 +923,12 @@ const [animateObj, setAnimateObj] = useState({ translateY: ['0%', '0%', '0%'] })
   }
 </script>
 
-<span style="transform: translate3d(0, {$appOpenIconBounceTransform}%, 0)">
-  <!-- Stuff -->
-</span>
+<button on:click={openApp}>
+  <span style="transform: translate3d(0, {$appOpenIconBounceTransform}%, 0)">
+    <!-- Stuff -->
+  </span>
+</button>
 ```
-
-</v-click>
 
 <style>
   .slidev-layout {
@@ -942,3 +941,235 @@ const [animateObj, setAnimateObj] = useState({ translateY: ['0%', '0%', '0%'] })
   }
 </style>
 
+<!--
+
+On the left, you have the code in framer motion. And on the right it's the svelte motion code. Clearly, framer motion one looks much smaller. But, let's read both of them once.
+
+- Hit next -
+
+Here we have an object `animateObj`. This contains the CSS properties to be manipulated, hence we have `translateY` as an array here. The array contains the keyframes. Right now it's all `0` to indicate to not animate initially.
+
+- Hit next -
+
+Next up we have an event listener on the `span`. Whenever you click or tap on it, it will trigger the animation. The keyframes become: 0% initially, then should reach -39.2% and then return to 0% again. This makes the app icon bounce.
+
+- Hit next -
+
+Next up, don't let the animation run on component mount.
+
+- Hit next -
+
+Pass the animateObj to the motion component to let it know what to animate. In this case, it's only the `translateY` property.
+
+- Hit next -
+
+Next up, defining the animation type. I want this to be a spring animation, and should go on for 700ms. Easy.
+
+- Hit next -
+
+And finally, `transformTemplate` to make sure the `transform3d` is not applied, which is what framer motion does by default. 
+
+- Hit next -
+
+Let's move on to the svelte one on the right
+
+- Hit next -
+
+First up, defining a tweened store. Because I want to control the duration of the animation, it is a `tweened` and not a `spring`. However, to give it a natural feel, it uses the `sinInOut` easing.
+
+- Hit next -
+
+Next up we got the button, which on click will trigger the animation.
+
+- Hit next -
+
+This is the `span` that will actually be transformed. You can see the transform style applied to it.
+
+- Hit next -
+
+And, coming back to the actual animation implementation, the `openApp` function. This is what actually handles the bounce animation. And, if you see the bounce animation, technically it's just two lines. Line number 11.
+
+- Hit next -
+
+We tell it to change the value to -39.2. Notice the `await` keyword. We are waiting for the animation to finish before we move on.
+
+- Hit next -
+
+When the animation to go above is finished, we move on to the next part, which is bringing it down. And that is simply setting it to 0.
+
+Notice how intuitive this version is. It legit reads like this: "Go up to -39.2, and when you are done with that, come back down". As simple as that. It's easy to scan and make sense of. Framer motion one is smaller, but if I wanted to make the animation more bouncy, or extreme, I would have to search a lot of framer motion docs to figure out how to do, whereas in the svelte one, I would be confident changing it.
+
+-->
+
+---
+layout: fact
+---
+
+# Those transitions 😍
+
+<!--
+
+Transitions in Svelte are basically animations to be run when some DOM is created or destroyed. This is nearly impossible to do in P/React without relying on external libraries like Framer Motion. But in Svelte, this is in-built and extremelyyyyyyy easy to do.
+
+-->
+
+---
+
+# Window close transition
+
+```svelte
+<script>
+  function windowCloseTransition(el, { duration = 300 }) {
+    const existingTransform = getComputedStyle(el).transform;
+
+    return {
+      duration,
+      easing: sineInOut,
+      css: (t) => `opacity: ${t}; transform: ${existingTransform} scale(${t})`,
+    };
+  }
+</script>
+
+<section out:windowCloseTransition></section>
+```
+
+<!--
+
+So, ofc, I put in transitions everywhere I could. Earlier, when you opened/closed any app, there was no transition. Now, when you close a window, it collapses into itself while closing, giving an awesome transition.
+
+This little piece code allows the window to close with a transition. I added this animation when I moved to Svelte version, because the react version with Framer Motion just felt too complex, so I didn't even bother with it.
+
+-->
+
+---
+layout: center
+---
+
+<img src="/window-close-animation.gif" h="[50vh]" />
+
+<!--
+
+And this is what you get. Looks good for just 13 lines of code.
+
+Ofc, it looks janky due to GIF's low framerate. But if you try it yourselves, it looks good.
+
+-->
+
+---
+layout: fact
+---
+
+# package.json?
+
+<!--
+
+Remember, I showed you the package.json that the React version had? 
+
+-->
+
+---
+layout: two-cols
+---
+
+```json
+"dependencies": {
+  "@mdi/js": "^5.9.55",
+  "@reach/slider": "^0.15.0",
+  "@rooks/use-raf": "^4.11.2",
+  "clsx": "^1.1.1",
+  "date-fns": "^2.22.1",
+  "framer-motion": "^4.1.17",
+  "immer": "^9.0.3",
+  "jotai": "^1.0.0",
+  "preact": "^10.5.13",
+  "react-rnd": "^10.3.3",
+  "react-roving-tabindex": "^3.1.0"
+}
+```
+
+::right::
+
+<v-click>
+
+```json {1-6|5}
+"dependencies": {
+  "@mdi/js": "^5.9.55",
+  "date-fns": "^2.23.0",
+  "popmotion": "^9.4.0",
+  "svelte-drag": "^1.3.1"
+}
+```
+
+</v-click>
+
+<style>
+  .slidev-layout {
+    gap: 2rem;
+  }
+</style>
+
+<!--
+
+This is the package.json of the preact version. Only the dependencies property.
+
+- Hit next -
+
+And this is it now. 2.75x smaller.
+
+But, lemme blow your mind even more. That dependency you see at the bottom?
+
+- Hit next -
+
+I created it. A month before I did the transition from React to Svelte. I created it as a fun exercise, because svelte ecosystem didn't have a tiny draggable library with the features I wanted. And it is just 2KB in size.
+
+So, this is a homecooked library, and very very small, so we can safely remove it from the comparison.
+
+-->
+
+---
+layout: fact
+---
+
+# 3.67x smaller
+
+<!--
+
+That means the number of dependencies is actually 3.67x smaller, than before, in sheer number. And no, it isn't because I repurposed the app logic to not use the dependencies, it's that most of the stuff is already built into Svelte. I didn't do a lot of work.
+
+-->
+
+---
+layout: fact
+---
+
+# <span text="red-300">146KB</span><span class="font-mono"> -> </span><span text="green-300">28.5KB</span>
+
+<style>
+  .slidev-layout {
+    padding: 2rem;
+  }
+</style>
+
+<!--
+
+So, in the end, this brings us to the final bundle size comparison. From 146KB to 28.5KB, this led to a reduction of more than 5 times in bundle size.
+
+But hey, that's not even the most important part. Initially, bundle size and performance were the things I always gave the highest priority. Not anymore. Now it's the readability and simplicity aspect that I value the most. Svelte gives me a lot of confidence. If I ever want to add something to it, I'll be able to do so very confidently. The code is very very readable and simple.
+
+-->
+
+---
+layout: fact
+---
+
+# Final words
+
+<!--
+
+Really, moving to Svelte made me realize how extremely powerful it is. A lot of React developers treat Svelte as a toy, and I can't blame them, I was one of them once. But really, it isn't a toy. In fact I'd say it's more powerful than React. Yes, less control over everything than React, but it is a better choice for 95% of developers than React anyway.
+
+-->
+
+---
+
+<h1>Thank you!</h1>
